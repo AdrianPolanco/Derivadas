@@ -1,24 +1,25 @@
 import tkinter as tk
-from sympy import Derivative, diff, symbols, simplify, latex
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from sympy import Derivative, symbols, simplify
+
+
+def format_derivada(termino, derivada):
+    # Formatear la derivada en el formato solicitado
+    x = symbols('x')
+    derivada_str = str(simplify(derivada))
+    derivada_str = derivada_str.replace("**", "^")
+    derivada_str = derivada_str.replace("*", "")
+    termino_str = str(simplify(termino))
+    termino_str = termino_str.replace("**", "^")
+    termino_str = termino_str.replace("*", "")
+    return f"d/dx ({termino_str}) = {derivada_str}"
 
 
 def calcular_derivada():
     termino = entrada_derivada.get()
     x = symbols('x')
     derivada = Derivative(termino, x).doit()
-    resultado = f"d/dx ({termino}) = {simplify(derivada)}"
+    resultado = format_derivada(termino, derivada)
     etiqueta_resultado.config(text=resultado)
-
-    # Mostrar la derivada en un gráfico matplotlib
-    plt.figure(figsize=(5, 3))
-    plt.text(0.1, 0.5, f"$d/dx ({termino})$", fontsize=16, usetex=True)
-    plt.axis('off')
-
-    canvas = FigureCanvasTkAgg(plt.gcf(), master=frame_grafico)
-    canvas.draw()
-    canvas.get_tk_widget().pack()
 
 
 # Crear la ventana principal
@@ -35,13 +36,9 @@ entrada_derivada.pack()
 boton_calcular = tk.Button(ventana, text='Calcular', command=calcular_derivada)
 boton_calcular.pack()
 
-# Marco para mostrar el gráfico matplotlib
-frame_grafico = tk.Frame(ventana)
-frame_grafico.pack()
-
-# Etiqueta para mostrar el resultado en formato LaTeX
+# Etiqueta para mostrar el resultado en formato deseado
 etiqueta_resultado = tk.Label(
-    ventana, justify="left", font=("Times", 14), anchor="w")
+    ventana, justify="left", font=("Times", 14))
 etiqueta_resultado.pack()
 
 # Bucle principal de la aplicación
