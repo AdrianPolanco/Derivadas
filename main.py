@@ -1,23 +1,20 @@
 import tkinter as tk
-from sympy import Derivative, symbols, simplify
+from sympy import Derivative, symbols, simplify, pretty, diff
 
 
 def format_derivada(termino, derivada):
     # Formatear la derivada en el formato solicitado
     x = symbols('x')
-    derivada_str = str(simplify(derivada))
-    derivada_str = derivada_str.replace("**", "^")
-    derivada_str = derivada_str.replace("*", "")
-    termino_str = str(simplify(termino))
-    termino_str = termino_str.replace("**", "^")
-    termino_str = termino_str.replace("*", "")
-    return f"d/dx ({termino_str}) = {derivada_str}"
-
+    derivada_str = str(simplify(derivada)).replace('**0', '°').replace('**1', '').replace('**2', '²').replace('**3', '³').replace('**4', '⁴').replace('**5', '⁵').replace('**6', '⁶').replace('**7', '⁷').replace('**8', '⁸').replace('**9', '⁹').replace('*', '')
+    termino_str = termino
+    return f"d/dx ({pretty(termino_str).replace('**0', '°').replace('**1', '').replace('**2', '²').replace('**3', '³').replace('**4', '⁴').replace('**5', '⁵').replace('**6', '⁶').replace('**7', '⁷').replace('**8', '⁸').replace('**9', '⁹').replace('*', '')}) = {pretty(derivada_str)}"
 
 def calcular_derivada():
     termino = entrada_derivada.get()
+    
+    # Reemplazar ** por ^ y ajustar notación de multiplicación
     x = symbols('x')
-    derivada = Derivative(termino, x).doit()
+    derivada = diff(termino, x)
     resultado = format_derivada(termino, derivada)
     etiqueta_resultado.config(text=resultado)
 
